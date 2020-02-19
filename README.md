@@ -187,5 +187,5 @@ export them in JSON and see the README in either the [COCO](https://github.com/L
 or [VOC](https://github.com/Labelbox/Labelbox/tree/master/exporters/voc-exporter) 
 export converter section for your next steps.
 
-## Terms of use, privacy and content dispute policy
-Here is our [terms of service, privacy and content dispute policy](https://www.dropbox.com/s/ph6w2ov4i4v5pf9/Labelbox_Terms_Privacy_Content.pdf?dl=0)
+## Legal
+Here are our [Terms of Use, Privacy Notice, CCPA Notice, Cookie Notice, and Copyright Dispute Policy](https://labelbox.com/docs/legal)
