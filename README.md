@@ -2,7 +2,7 @@
 [Labelbox](https://www.labelbox.com/) is the fastest way to annotate data to build and ship artificial intelligence applications. Use this github repository to help you set up a Custom Editor in Labelbox.
 
 ## Labelbox Platform
-![](https://labelbox.com/static/images/product.png)
+![](https://labelbox.com/static/images/for-marketing/tdp-workflow.jpg)
 
 ## Documentation
 * [Custom Editor SDK docs](https://docs.labelbox.com/custom-interface/) - Instructions for setting up a custom editor, a sample setup script, and a full reference for the Labelbox Custom Editor SDK.
