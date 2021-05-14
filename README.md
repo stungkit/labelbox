@@ -6,7 +6,7 @@
 
 ## Documentation
 * [Labelbox documentation](https://docs.labelbox.com/) - General knowledge base for the Labelbox app.
-* [Custom editor SDK docs] (https://github.com/Labelbox/labelbox/tree/master/custom-interfaces) - Docs and samples for creating your own custom labeling interface.
+* [Custom editor SDK docs](https://github.com/Labelbox/labelbox/tree/master/custom-interfaces) - Docs and samples for creating your own custom labeling interface.
 * [Python SDK docs](https://docs.labelbox.com/python-sdk/) - Installation & authentication instructions, tutorials, examples, and a full reference for the Labelbox Python SDK.
 * [GraphQL API docs](https://docs.labelbox.com/graphql-api/) - Authentication guide, examples, and a full reference for the Labelbox GraphQL API
 
