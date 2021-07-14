@@ -11,7 +11,7 @@ To set up a simple custom labeling interface, follow these steps:
 ## Step 1: Run a localhost server
 1. Set up your custom interface locally. You can use this [Hello world script](https://github.com/Labelbox/labelbox/blob/master/custom-interfaces/hello-world/index.html) as an example.
 1. Start the localhost server in a directory containing your custom interface frontend files. For example, run the server inside `custom-interfaces/hello-world` to run the Hello world custom interface locally.
-`python -m SimpleHTTPServer`
+`python -m http.server`
 1. Open your browser and navigate to the `<localhost> endpoint provided by the server.
 1. Customize the labeling frontend by making changes to `index.html`.
 1. Restart the server and refresh the browser to see the updates.
