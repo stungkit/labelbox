@@ -6,6 +6,20 @@ With a custom editor, you can label:
 * medical DICOM imagery
 * multiple assets at once
 
+Not supported:
+* Ontologies (label tooling)
+* Benchmarks and consensus
+* Model-assisted labeling
+* Project analytics
+* Issues and comments
+* Model diagnostics
+* Data catalog
+
+Note:
+* Interface customizations must be self-developed, hosted, and maintained
+* Limited support for existing framework
+
+
 To set up a simple custom labeling interface, follow these steps:
 
 ## Step 1: Run a localhost server
