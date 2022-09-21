@@ -179,7 +179,7 @@ Labelbox.setLabelForAsset('good').then(() => console.log('Success!'));
 
 ### Skip asset
 `Labelbox.skip` is identical to `setLabelForAsset(‘Skip’, ‘Skip’)`. The Label that will be seen in your export will be set to Skip.
-Updating a label prevously `Skip` should reflect in the export.
+Updating a label previously `Skip` should reflect in the export.
 
 
 ```javascript
