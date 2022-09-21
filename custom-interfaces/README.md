@@ -82,7 +82,7 @@ Use this script to create a minimal custom interface that fetches and submits la
 
 // Fetch an asset to label then submit the label
 function label(label){
-    Labelbox.setLabelForAsset(label).then(() => {
+    Labelbox.setLabelForAsset(label, "Any").then(() => {
         Labelbox.fetchNextAssetToLabel();
     });
 }
@@ -155,7 +155,7 @@ This function will set the `currentAsset` to be the next unlabeled asset. For ex
 
 ```javascript
 function label(label){
-  Labelbox.setLabelForAsset(label).then(() => {
+  Labelbox.setLabelForAsset(label, "Any").then(() => {
     Labelbox.fetchNextAssetToLabel();
   });
 }
@@ -179,6 +179,8 @@ Labelbox.setLabelForAsset('good').then(() => console.log('Success!'));
 
 ### Skip asset
 `Labelbox.skip` is identical to `setLabelForAsset(‘Skip’, ‘Skip’)`. The Label that will be seen in your export will be set to Skip.
+Updating a label prevously `Skip` should reflect in the export.
+
 
 ```javascript
 Labelbox.skip().then(() => console.log('Skipped!'))
