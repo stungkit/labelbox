@@ -8,7 +8,7 @@ client = Client(api_key=LABELBOX_API_KEY)
 
 def upload_asset(event, context):
     """Uploads an asset to Catalog when a new asset is uploaded to GCP bucket. 
-       If a bucket with object_name exists, then an asset is added to that dataset. Otherwise, a new dataset is created.
+       If a dataset with bucket_name exists in Catalog, then an asset is added to that dataset. Otherwise, a new dataset is created.
     Args:
          event (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
