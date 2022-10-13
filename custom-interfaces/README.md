@@ -263,4 +263,5 @@ const subscription = Labelbox.currentAsset().subscribe((asset) => {
 subscription.unsubscribe();
 ```
 
-Custom editor does not support quality settings (Consensus and Benchmarks) and review metrics (no consensus score or Benchmark will be calculated).
+### Limited Support
+Custom editor does not support quality settings (Consensus and Benchmarks) and review metrics (no consensus score or benchmarks will be calculated).
