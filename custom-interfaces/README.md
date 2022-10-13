@@ -262,3 +262,5 @@ const subscription = Labelbox.currentAsset().subscribe((asset) => {
 // However, I would recommend having a single subscription for your entire application.
 subscription.unsubscribe();
 ```
+
+Custom editor does not support quality settings (Consensus and Benchmarks) and review metrics (no consensus score or Benchmark will be calculated).
