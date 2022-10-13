@@ -14,6 +14,8 @@ Not supported:
 * Issues and comments
 * Model diagnostics
 * Data catalog
+* Quality settings (consensus & benchmarks)
+* Data Rows tab filtering (annotations)
 
 Note:
 * Interface customizations must be self-developed, hosted, and maintained
@@ -262,6 +264,3 @@ const subscription = Labelbox.currentAsset().subscribe((asset) => {
 // However, I would recommend having a single subscription for your entire application.
 subscription.unsubscribe();
 ```
-
-### Limited Support
-Custom editor does not support quality settings (Consensus and Benchmarks) and review metrics (no consensus score or benchmarks will be calculated).
