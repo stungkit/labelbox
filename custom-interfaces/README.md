@@ -14,8 +14,8 @@ Not supported:
 * Issues and comments
 * Model diagnostics
 * Data catalog
-* Quality settings (consensus & benchmarks)
 * Data Rows tab filtering (annotations)
+* Metadata and Attachments
 
 Note:
 * Interface customizations must be self-developed, hosted, and maintained
