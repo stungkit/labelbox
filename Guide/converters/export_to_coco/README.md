@@ -1,6 +1,6 @@
 # Credits
 
-Author: Raphael Jafri
+Author: Raphael Jafri (Labelbox Solutions Engineer)
 
 # Overview
 
