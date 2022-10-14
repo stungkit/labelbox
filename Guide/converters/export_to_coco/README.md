@@ -13,6 +13,7 @@ For polygons
 - Technically, COCO does not directly support polygons, however COCO does support segmentation masks. So for polygons, we will treat them as segmentation masks. 
 
 Key Assumptions of the Converter:
+
     Info Section
         - description = project name
         - url = project URL
@@ -41,9 +42,6 @@ Key Assumptions of the Converter:
         - Segementation masks and polygons fall into the segmentation COCO schema
         - Bounding boxes fall into the bounding box COCO schema
 
-# Purpose
-
-This script is meant to be shared with customers that ask for this conversion. This is a comprehensive script with a lot of complexity, so we are not responsible for any modifications beyond what has been scoped here. 
 
 # How to Use It
 
