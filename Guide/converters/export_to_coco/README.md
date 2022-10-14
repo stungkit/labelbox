@@ -48,7 +48,3 @@ Key Assumptions of the Converter:
 - In terminal, run `python3 path/export_to_coco.py -api_key "" -project_id "" -save_to ""`
 
 - The script will save the resulting dataset in the same directory as this .py file with the name `projectID_coco_dataset.json`
-
-# Usage
-
-This script was given to CBP as part of our agreement is to deliver the export in their desired format. 
