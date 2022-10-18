@@ -22,13 +22,13 @@ Key Assumptions of the Converter:
         - image_id = data row ID
         - category_id = defaults to the tool's schemaId encoded value, but checks for nested classes and if any radio / checklist answers exist, pulls the first one
         - id = annotation feature ID
-        ** All `iscrowd` values are 0 for segmentation masks / polygons
+        ** All `iscrowd` values are 0 for segmentatino masks / polygons
     Categories Section
         - All tools and 1st-layer nested classes will populate in the categories section
         - Polylines and Points fall into the COCO "keypoints" schema:
             - For polylines, the `max_keypoints` value is found by iterating over all annotations and grabbing the global maximum
             - For points, the `skeleton` is [0, 0] and `max_keypoints` is 0
-        - Segmentation masks and polygons fall into the segmentation COCO schema
+        - Segementation masks and polygons fall into the segmentation COCO schema
         - Bounding boxes fall into the bounding box COCO schema
 
 How to Run:
@@ -179,7 +179,7 @@ def coco_point_converter(data_row_id, annotation, category_id):
     """  
     coco_annotation = {
         "image_id": data_row_id,
-        "keypoints": annotation['point']['x'], annotation['point']['y'], 2],
+        "keypoints": [annotation['point']['x'], annotation['point']['y'], 2],
         "num_keypoints": 1,
         "category_id" : category_id,
         "id": annotation['featureId']
@@ -324,7 +324,7 @@ def coco_converter(project):
                 "width" : data_row.media_attributes['width'],
                 "date_captured" : data_row.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 "id" : data_row.uid,
-                "coco_url": data_row.row_dat
+                "coco_url": data_row.row_data
             })
     print(f'\nData Rows Converted into a COCO Dataset.')  
     annotations = []
@@ -394,11 +394,14 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("-api_key", type=str)
     argparser.add_argument("-project_id", type=str)
-    argparser.add_argument("-save_to", type=str)
+    argparser.add_argument("-save_to", type=str, default="")
     args = argparser.parse_args()
     save_to = args.save_to
     coco_dataset = coco_converter(Client(args.api_key).get_project(args.project_id))
-    save_to = args.save_to + "/" if args.save_to[-1] != "/" else args.save_to
+    if not args.save_to:
+        save_to = args.save_to
+    else:
+        save_to = args.save_to + "/" if args.save_to[-1] != "/" else args.save_to
     file_name = save_to + args.project_id + "_coco_dataset.json"
     with open(file_name, 'w') as f:
         json.dump(coco_dataset, f, indent=4)
