@@ -6,7 +6,7 @@
 
 URL: https://image-selection.labelbox.com
 
-Follow the directions to install the editor here: https://docs.labelbox.com/custom-interface/
+Follow the directions to install the editor here: https://github.com/Labelbox/labelbox/tree/master/custom-interfaces#readme
 
 ## Editor Input
 
