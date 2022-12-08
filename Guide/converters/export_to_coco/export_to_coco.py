@@ -1,45 +1,13 @@
-"""export_to_coco.py
-
-Script that exports from labelbox and converts all tool annotations into COCO syntax
-
-Key Assumptions of the Converter:
-    Info Section
-        - description = project name
-        - url = project URL
-        - version = always just "1.0"
-        - year = time of export
-        - contributor = email of whoever created the Labelbox project
-        - date_created = time of export
-    Licenses Section
-        - url = N/A
-        - id = always just "1"
-        - name = N/A
-    Images Section
-        - file_name = data row external ID
-        - date_captured = data row created at value
-        - id = data row ID
-    Annotations Section - covers all object annotations
-        - image_id = data row ID
-        - category_id = defaults to the tool's schemaId encoded value, but checks for nested classes and if any radio / checklist answers exist, pulls the first one
-        - id = annotation feature ID
-        ** All `iscrowd` values are 0 for segmentatino masks / polygons
-    Categories Section
-        - All tools and 1st-layer nested classes will populate in the categories section
-        - Polylines and Points fall into the COCO "keypoints" schema:
-            - For polylines, the `max_keypoints` value is found by iterating over all annotations and grabbing the global maximum
-            - For points, the `skeleton` is [0, 0] and `max_keypoints` is 0
-        - Segementation masks and polygons fall into the segmentation COCO schema
-        - Bounding boxes fall into the bounding box COCO schema
-
-How to Run:
-  python3 export_to_coco.py -api_key "" -project_id "" 
+""" export_to_coco.py -- Script that exports from labelbox and converts all tool annotations into COCO syntax
 
 Args:
   api_key (str)         :       API Key from Labelbox to give the script permission to export data
   project_id (str)      :       The Project from which this script will export labels and convert to COCO syntax
   save_to (str)         :       From the working directory, where to save the COCO-converted annotations to
+  
 Returns:
-  A full COCO dataset with the five keys `info`, `licenses`, `images`, `annotations` and `categories` is saved to the same directory as this python file. The file name is `{project_id}_coco_dataset.json`
+  A full COCO dataset with the five keys `info`, `licenses`, `images`, `annotations` and `categories`. 
+  The file name is saved as `{working_directory}/{save_to}/{project_id}_coco_dataset.json`
 """
 
 from labelbox import Client
