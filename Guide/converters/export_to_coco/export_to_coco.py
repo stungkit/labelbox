@@ -82,14 +82,14 @@ def layer_iterator(feature_map, node_layer, encoded_value=0, parent_featureSchem
                 node_type = "leaf_option"
         node_dict = { node['featureSchemaId'] : {"name" : node_name, "color" : color, "type" : node_type, "kind" : node_kind, "parent_featureSchemaIds" : parent_featureSchemaIds, "encoded_value" : encoded_value}}
         feature_map.update(node_dict)
-    if next_layer:
-        feature_map, next_layer, encoded_value, parent_featureSchemaIds, parent_featureSchemaId = layer_iterator(
-            feature_map=feature_map, 
-            node_layer=next_layer, 
-            encoded_value=encoded_value, 
-            parent_featureSchemaIds=parent_featureSchemaIds, 
-            parent_featureSchemaId=node['featureSchemaId']
-            )
+        if next_layer:
+            feature_map, next_layer, encoded_value, parent_featureSchemaIds, parent_featureSchemaId = layer_iterator(
+                feature_map=feature_map, 
+                node_layer=next_layer, 
+                encoded_value=encoded_value, 
+                parent_featureSchemaIds=parent_featureSchemaIds, 
+                parent_featureSchemaId=node['featureSchemaId']
+                )
         parent_featureSchemaIds = parent_featureSchemaIds[:-1]
     return feature_map, next_layer, encoded_value, parent_featureSchemaIds, parent_featureSchemaId
 
