@@ -273,8 +273,9 @@ def coco_converter(project):
     # Create a dictionary where {key=data_row_id : value=data_row}
     data_rows = {}
     print(f'Exporting Data Rows from Project...')
-    for batch in project.batches():
-        for data_row in batch.export_data_rows():
+    subsets = list(project.batches()) if len(list(project.batches())) > 0 else list(project.datasets())
+    for subset in subsets:
+        for data_row in subset.export_data_rows():
             data_rows.update({data_row.uid : data_row})  
     print(f'\nExport complete. {len(data_rows)} Data Rows Exported')
     # Images section generated from data row export
