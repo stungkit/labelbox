@@ -7,7 +7,9 @@ How to set it up?
  - Refer to our guide page (Step 1&2) : https://github.com/Labelbox/labelbox/tree/text-example-custom-tool/custom-interfaces
  
  - For quick testing you can store the HTML file to a cloud storage and use the URL as your `URL to label editor`
+ 
  Note : The URL needs to be signed and accessible to `labelbox.com/*`
+ 
  ![editor setup in Labelbox](https://github.com/Labelbox/labelbox/blob/text-example-custom-tool/custom-interfaces/text-text-custom-tool-example/custom_editor_set_up.jpg)
  
  This why having a single file is beneficial in the development stage
