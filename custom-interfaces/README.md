@@ -16,6 +16,7 @@ Not supported:
 * Data catalog
 * Data Rows tab filtering (annotations)
 * Metadata and Attachments
+* Workflow
 
 Note:
 * Interface customizations must be self-developed, hosted, and maintained
