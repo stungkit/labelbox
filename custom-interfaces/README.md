@@ -5,6 +5,8 @@ With a custom editor, you can label:
 * point clouds
 * medical DICOM imagery
 * multiple assets at once
+* develop custom tool 
+* create your own label object (depending on you needs)
 
 Not supported:
 * Ontologies (label tooling)
@@ -16,7 +18,9 @@ Not supported:
 * Data catalog
 * Data Rows tab filtering (annotations)
 * Metadata and Attachments
-* Workflow
+
+Limited Support:
+* Workflow (project needs to be configured in queue mode batch) 
 
 Note:
 * Interface customizations must be self-developed, hosted, and maintained
