@@ -2,11 +2,11 @@
 If you find that the Labelbox Editor does not have the functionality you need, you can build your own custom labeling interface. Explore some of our open-source custom editors [here](https://github.com/Labelbox/Labelbox/tree/master/custom-interfaces). We also offer a JavaScript SDK you can use to programmatically fetch assets and submit labels.
 
 With a custom editor, you can label:
-* point clouds
-* medical DICOM imagery
-* multiple assets at once
-* develop custom tool 
-* create your own label object (depending on you needs)
+* Point clouds
+* Medical DICOM imagery
+* Multiple assets at once
+* Develop custom tool 
+* Create your own label object (depending on you needs)
 
 Not supported:
 * Ontologies (label tooling)
