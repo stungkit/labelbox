@@ -1,5 +1,4 @@
 """ export_to_coco.py -- Script that exports from labelbox and converts all tool annotations into COCO syntax
-
 Args:
   api_key (str)         :       API Key from Labelbox to give the script permission to export data
   project_id (str)      :       The Project from which this script will export labels and convert to COCO syntax
@@ -15,7 +14,6 @@ import argparse
 import copy
 import json
 import datetime
-from google.api_core import retry
 import requests
 from PIL import Image 
 import numpy as np
@@ -103,10 +101,10 @@ def coco_bbox_converter(data_row_id, annotation, category_id):
         An annotation dictionary in the COCO format
     """
     coco_annotation = {
-        "image_id": data_row_id,
-        "bbox": [annotation['bbox']['left'], annotation['bbox']['top'], annotation['bbox']['width'], annotation['bbox']['height']],
-        "category_id": category_id,
-        "id": annotation['featureId']
+        "image_id": str(data_row_id),
+        "bbox": [str(annotation['bbox']['left']), str(annotation['bbox']['top']), str(annotation['bbox']['width']), str(annotation['bbox']['height'])],
+        "category_id": str(category_id),
+        "id": str(annotation['featureId'])
     }
     return coco_annotation
 
@@ -123,16 +121,16 @@ def coco_line_converter(data_row_id, annotation, category_id):
     coco_line = []
     num_line_keypoints = 0
     for coordinates in line:
-        coco_line.append(coordinates['x'])
-        coco_line.append(coordinates['y'])
-        coco_line.append(2)
+        coco_line.append(str(coordinates['x']))
+        coco_line.append(str(coordinates['y']))
+        coco_line.append("2")
         num_line_keypoints += 1
     coco_annotation = {
-        "image_id": data_row_id,
+        "image_id": str(data_row_id),
         "keypoints": coco_line,
-        "num_keypoints": num_line_keypoints,
-        "category_id" : category_id,
-        "id": annotation['featureId']
+        "num_keypoints": str(num_line_keypoints),
+        "category_id" : str(category_id),
+        "id": str(annotation['featureId'])
     }
     return coco_annotation, num_line_keypoints
 
@@ -146,11 +144,11 @@ def coco_point_converter(data_row_id, annotation, category_id):
         An annotation dictionary in the COCO format
     """  
     coco_annotation = {
-        "image_id": data_row_id,
-        "keypoints": [annotation['point']['x'], annotation['point']['y'], 2],
-        "num_keypoints": 1,
-        "category_id" : category_id,
-        "id": annotation['featureId']
+        "image_id": str(data_row_id),
+        "keypoints": [str(annotation['point']['x']), str(annotation['point']['y']), "2"],
+        "num_keypoints": str(1),
+        "category_id" : str(category_id),
+        "id": str(annotation['featureId'])
     }
     return coco_annotation  
 
@@ -163,28 +161,43 @@ def coco_polygon_converter(data_row_id, annotation, category_id):
     Returns:
         An annotation dictionary in the COCO format
     """  
-    poly_points = [[coord['x'], coord['y']] for coord in annotation['polygon']]
-    bounds = Polygon(poly_points).bounds
+    all_points = []
+    points_as_coords = []
+    for coord in annotation['polygon']:
+        points_as_coords.append([coord['x'], coord['y']])
+        all_points.append(str(coord['x']))
+        all_points.append(str(coord['y']))
+    polygon = Polygon(points_as_coords)
     coco_annotation = {
-        "image_id" : data_row_id,
-        "segmentation" : [[item for sublist in poly_points for item in sublist]],
-        "bbox" : [bounds[0], bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1]],
-        "area" : Polygon(poly_points).area,
-        "id": annotation['featureId'],
-        "iscrowd" : 0,
-        "category_id" : category_id
+        "image_id" : data_row_id, "segmentation" : all_points,
+        "bbox" : [
+            str(polygon.bounds[0]), str(polygon.bounds[1]), 
+            str(polygon.bounds[2]-polygon.bounds[0]), 
+            str(polygon.bounds[3]-polygon.bounds[1])
+        ],
+        "area" : str(polygon.area), "id": str(annotation['featureId']),
+        "iscrowd" : "0", "category_id" : str(category_id)
     }  
     return coco_annotation
 
-@retry.Retry(predicate=retry.if_exception_type(Exception), deadline=1200.)
-def download_mask(annotation):
-    """Incorporates retry logic into the download of a mask / polygon Instance URI
+def download_mask(url):
+    """ Downloads a mask URL
     Args:
-        annotation (dict)       :     A dictionary pertaining to a label exported from Labelbox
+        url (dict)       :     URL of a mask
     Returns:
-        A numPy array of said mask
+        A 2-D numPy array of said mask
     """ 
-    return requests.get(annotation['instanceURI']).content
+    downloaded = False
+    while not downloaded:
+        try:
+            payload = requests.get(url).content
+            bytes_rep = BytesIO(payload)    
+            pil_image = Image.open(bytes_rep)
+            np_array = np.array(pil_image)
+            downloaded = True
+        except:
+            downloaded = False
+    return np_array[:,:,0]
 
 def coco_mask_converter(data_row_id, annotation, category_id):
     """Given a label dictionary and a mask annotation from said label, will return the coco-converted segmentation mask annotation dictionary
@@ -195,20 +208,26 @@ def coco_mask_converter(data_row_id, annotation, category_id):
     Returns:
         An annotation dictionary in the COCO format
     """  
-    mask_data = download_mask(annotation['instanceURI'])
-    binary_mask_arr = np.where(np.array(Image.open(BytesIO(mask_data))))
-    contours = cv2.findContours(binary_mask_arr, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[0]
-    coords = contours[0]
-    poly_points = np.array([[coords[i][0][0], coords[i][0][1]] for i in range(0, len(coords))])
-    bounds = Polygon(poly_points).bounds
+    contours, _ = cv2.findContours(download_mask(annotation['instanceURI']), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    all_points = []
+    points_as_coords = []
+    for contour in contours:
+        contour = contour.flatten().tolist()
+        if len(contour) >= 6:
+            for i in range(0, len(contour), 2):
+                points_as_coords.append([contour[i], contour[i+1]])
+                all_points.append(str(contour[i]))
+                all_points.append(str(contour[i+1]))
+    polygon = Polygon(points_as_coords)
     coco_annotation = {
-        "image_id" : data_row_id,
-        "segmentation" : [[item for sublist in poly_points for item in sublist]],
-        "bbox" : [bounds[0], bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1]],
-        "area" : Polygon(poly_points).area,
-        "id": annotation['featureId'],
-        "iscrowd" : 0,
-        "category_id" : category_id
+        "image_id" : data_row_id, "segmentation" : all_points,
+        "bbox" : [
+            str(polygon.bounds[0]), str(polygon.bounds[1]), 
+            str(polygon.bounds[2]-polygon.bounds[0]), 
+            str(polygon.bounds[3]-polygon.bounds[1])
+        ],
+        "area" : str(polygon.area), "id": str(annotation['featureId']),
+        "iscrowd" : "0", "category_id" : str(category_id)
     }  
     return coco_annotation
 
@@ -250,33 +269,25 @@ def coco_converter(project):
     Args:
         project (labelbox.schema.project.Project)   :   Labelbox project object
     Returns:
-
     """
     labels_list = project.export_labels(download=True)
     # Info section generated from project information
     info = {
         'description' : project.name,
         'url' : f'https://app.labelbox.com/projects/{project.uid}/overview',
-        'version' : "1.0", 
-        'year' : datetime.datetime.now().year,
+        'version' : "1.0",  'year' : datetime.datetime.now().year,
         'contributor' : project.created_by().email,
         'date_created' : datetime.datetime.now().strftime('%Y/%m/%d'),
     }
     # Licenses section is left empty
-    licenses = [
-        {
-            "url" : "N/A",
-            "id" : 1,
-            "name" : "N/A"
-        }
-    ]
+    licenses = [ { "url" : "N/A", "id" : 1, "name" : "N/A" } ]
     # Create a dictionary where {key=data_row_id : value=data_row}
     data_rows = {}
     print(f'Exporting Data Rows from Project...')
     subsets = list(project.batches()) if len(list(project.batches())) > 0 else list(project.datasets())
     for subset in subsets:
         for data_row in subset.export_data_rows():
-            data_rows.update({data_row.uid : data_row})  
+            data_rows.update({data_row.uid : data_row})
     print(f'\nExport complete. {len(data_rows)} Data Rows Exported')
     # Images section generated from data row export
     print(f'\nConverting Data Rows into a COCO Dataset...\n')
@@ -287,13 +298,11 @@ def coco_converter(project):
         if label['DataRow ID'] not in data_row_check:
             data_row_check.append(label['DataRow ID'])
             images.append({
-                "license" : 1,
-                "file_name" : data_row.external_id,
-                "height" : data_row.media_attributes['height'],
+                "license" : 1, "file_name" : data_row.external_id,
+                "height" : data_row.media_attributes['height'], 
                 "width" : data_row.media_attributes['width'],
                 "date_captured" : data_row.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                "id" : data_row.uid,
-                "coco_url": data_row.row_data
+                "id" : data_row.uid, "coco_url": data_row.row_data
             })
     print(f'\nData Rows Converted into a COCO Dataset.')  
     annotations = []
@@ -302,14 +311,14 @@ def coco_converter(project):
     global_max_keypoints = 0
     futures = []
     with ThreadPoolExecutor() as exc:
-        for label in tqdm(labels_list):
+        for label in labels_list:
             for annotation in label['Label']['objects']:
                 futures.append(exc.submit(coco_annotation_converter, label['DataRow ID'], annotation, ontology_index))
-        for f in as_completed(futures):
+        for f in tqdm(as_completed(futures)):
             res = f.result()
-            if res[1] > global_max_keypoints:
-                global_max_keypoints = copy.deepcopy(res[1])
-            annotations.append(res[0])    
+            if int(res[1]) > global_max_keypoints:
+                global_max_keypoints = int(copy.deepcopy(res[1]))
+            annotations.append(res[0])
     print(f'\nAnnotation Conversion Complete. Converted {len(annotations)} annotations into the COCO Format.')    
     categories = []
     print(f'\nConverting the Ontology into the COCO Dataset Format...') 
@@ -319,10 +328,10 @@ def coco_converter(project):
             skeleton = []
             for i in range(0, global_max_keypoints): 
                 keypoints.append(str("line_")+str(i+1))
-                skeleton.append([i, i+1])
+                skeleton.append([str(i), str(i+1)])
             categories.append({
                 "supercategory" : ontology_index[featureSchemaId]['name'],
-                "id" : ontology_index[featureSchemaId]["encoded_value"],
+                "id" : str(ontology_index[featureSchemaId]["encoded_value"]),
                 "name" : ontology_index[featureSchemaId]['name'],
                 "keypoints" : keypoints,
                 "skeleton" : skeleton,
@@ -330,22 +339,22 @@ def coco_converter(project):
         elif ontology_index[featureSchemaId]["type"] == "point": 
             categories.append({
                 "supercategory" : ontology_index[featureSchemaId]['name'],
-                "id" : ontology_index[featureSchemaId]["encoded_value"],
+                "id" : str(ontology_index[featureSchemaId]["encoded_value"]),
                 "name" : ontology_index[featureSchemaId]['name'],
                 "keypoints" : ['point'],
-                "skeleton" : [0, 0],
+                "skeleton" : ["0", "0"],
             })        
         elif ontology_index[featureSchemaId]['kind'] == 'tool':
             categories.append({
                 "supercategory" : ontology_index[featureSchemaId]['name'],
-                "id" : ontology_index[featureSchemaId]["encoded_value"],
+                "id" : str(ontology_index[featureSchemaId]["encoded_value"]),
                 "name" : ontology_index[featureSchemaId]['name']
             })     
         elif len(ontology_index[featureSchemaId]['parent_featureSchemaIds']) == 2:
             supercategory = ontology_index[ontology_index[featureSchemaId]['parent_featureSchemaIds'][0]]['name']
             categories.append({
                 "supercategory" : supercategory,
-                "id" : ontology_index[featureSchemaId]["encoded_value"],
+                "id" : str(ontology_index[featureSchemaId]["encoded_value"]),
                 "name" : ontology_index[featureSchemaId]['name']
             })
     print(f'\nOntology Conversion Complete')       
@@ -372,6 +381,6 @@ if __name__ == "__main__":
     else:
         save_to = args.save_to + "/" if args.save_to[-1] != "/" else args.save_to
     file_name = save_to + args.project_id + "_coco_dataset.json"
-    print(f"Saving output file to {file_name}")
+    print(f"\nSaving output file to {file_name}")
     with open(file_name, 'w') as f:
         json.dump(coco_dataset, f, indent=4)
