@@ -372,5 +372,6 @@ if __name__ == "__main__":
     else:
         save_to = args.save_to + "/" if args.save_to[-1] != "/" else args.save_to
     file_name = save_to + args.project_id + "_coco_dataset.json"
+    print(f"Saving output file to {file_name}")
     with open(file_name, 'w') as f:
         json.dump(coco_dataset, f, indent=4)
