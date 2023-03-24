@@ -366,7 +366,7 @@ def coco_converter(project):
         "categories" : categories
     }      
     print(f'\nCOCO Conversion Complete')    
-    return coco_dataset 
+    return coco_dataset
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
