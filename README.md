@@ -1,8 +1,6 @@
 # Labelbox
 Explore examples and guides to build custom labeling apps (editors) in Labelbox.
 
-## Labelbox platform
-![](https://files.readme.io/a16e8c0-Screen_Shot_2022-08-29_at_12.20.15_AM.png)
 
 ## Documentation
 * [Labelbox documentation](https://docs.labelbox.com/) - General knowledge base for the Labelbox app.
