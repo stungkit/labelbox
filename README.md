@@ -1,5 +1,5 @@
 # Labelbox
-[Labelbox](https://www.labelbox.com/) is the fastest way to annotate data to build and ship artificial intelligence applications. Use this github repository to help you set up a Custom Editor in Labelbox.
+Explore examples and guides to build custom labeling apps (editors) in Labelbox.
 
 ## Labelbox platform
 ![](https://files.readme.io/a16e8c0-Screen_Shot_2022-08-29_at_12.20.15_AM.png)
