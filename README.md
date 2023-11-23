@@ -1,6 +1,8 @@
 # Labelbox
 Explore examples and guides to build custom labeling apps (editors) in Labelbox.
 
+Only available for our Entreprise customer [Pricing](https://labelbox.com/pricing/).
+
 
 ## Documentation
 * [Labelbox documentation](https://docs.labelbox.com/) - General knowledge base for the Labelbox app.
