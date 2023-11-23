@@ -1,5 +1,6 @@
 # Custom Editor SDK
 If you find that the Labelbox Editor does not have the functionality you need, you can build your own custom labeling interface. Explore some of our open-source custom editors [here](https://github.com/Labelbox/Labelbox/tree/master/custom-interfaces). We also offer a JavaScript SDK you can use to programmatically fetch assets and submit labels.
+Only available for our Entreprise customer [Pricing](https://labelbox.com/pricing/).
 
 With a custom editor, you can label:
 * Point clouds
@@ -10,17 +11,13 @@ With a custom editor, you can label:
 
 Not supported:
 * Ontologies (label tooling)
-* Benchmarks and consensus
 * Model-assisted labeling
 * Project analytics
 * Issues and comments
 * Model diagnostics
-* Data catalog
+* Data Catalog
 * Data Rows tab filtering (annotations)
 * Metadata and Attachments
-
-Limited Support:
-* Workflow (project needs to be configured in queue mode batch) 
 
 Note:
 * Interface customizations must be self-developed, hosted, and maintained
