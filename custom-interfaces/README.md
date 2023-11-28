@@ -182,7 +182,15 @@ Labelbox.setLabelForAsset('good').then(() => console.log('Success!'));
 ```
 
 ### Skip asset
-`Labelbox.skip` is identical to `setLabelForAsset(‘Skip’, ‘Skip’)`. The Label that will be seen in your export will be set to Skip.
+`Labelbox.skip` needs to be a dictionnary, by default it will just be `Skip` and will creates issue if you are using webhooks. 
+Please prefer using :
+`function skip() {
+    const skipLabel = "{'Skip'}";
+    Labelbox.setLabelForAsset(skipLabel).then(() => {
+      Labelbox.fetchNextAssetToLabel();
+    });
+  }`
+The Label that will be seen in your export will be set to {'Skip'}.
 Updating a label previously `Skip` should reflect in the export.
 
 
