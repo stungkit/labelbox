@@ -188,7 +188,7 @@ Please prefer using :
 
 ```javascript
 function skip() {
-    const skipLabel = "{'Skip'}";
+    const skipLabel = '{"label": "Skip"}';
     Labelbox.setLabelForAsset(skipLabel).then(() => {
       Labelbox.fetchNextAssetToLabel();
     });
