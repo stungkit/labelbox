@@ -22,6 +22,7 @@ Not supported:
 Note:
 * Interface customizations must be self-developed, hosted, and maintained
 * Limited support for existing framework
+* Export v2 supported, annotation are in the `custom_labels` objects payload
 
 
 To set up a simple custom labeling interface, follow these steps:
